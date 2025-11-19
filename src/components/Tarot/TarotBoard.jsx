@@ -8,22 +8,27 @@ const TarotBoard = () => {
   const [selectedCards, setSelectedCards] = useState([]);
   const [flippedIndices, setFlippedIndices] = useState([]); // Lưu index những lá đã lật
 
-  // Hàm xào bài (Fisher-Yates Shuffle)
+  // Hàm xào bài (Đã nâng cấp tỷ lệ bài ngược)
   const shuffleDeck = () => {
     setStep('shuffling');
     
-    // Tạo hiệu ứng giả vờ xào bài trong 1.5 giây
     setTimeout(() => {
       const deck = [...tarotData];
+      // Thuật toán Fisher-Yates để tráo bài
       for (let i = deck.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [deck[i], deck[j]] = [deck[j], deck[i]];
       }
       
-      // Lấy 3 lá đầu tiên sau khi xào
-      const picked = deck.slice(0, 3);
+      // Lấy 3 lá đầu tiên và gán trạng thái Ngược/Xuôi
+      const picked = deck.slice(0, 3).map(card => ({
+        ...card,
+        // Logic: Sinh số ngẫu nhiên từ 0-1. Nếu nhỏ hơn 0.3 (30%) thì là ngược
+        isReversed: Math.random() < 0.3 
+      }));
+
       setSelectedCards(picked);
-      setFlippedIndices([]); // Reset trạng thái lật
+      setFlippedIndices([]); 
       setStep('reading');
     }, 1500);
   };
