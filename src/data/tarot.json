@@ -1,0 +1,254 @@
+[
+    {
+        "id": "major_0",
+        "name": "The Fool",
+        "image": "/public/tarot-deck/0-Fool-icon.png",
+        "meaning_upright": "Khởi đầu mới, tự do, ngây thơ...",
+        "meaning_reversed": "Bất cẩn, liều lĩnh..."
+    },
+    {
+        "id": "major_1",
+        "name": "The Magician",
+        "image": "/public/tarot-deck/1-Magician-icon.png",
+        "meaning_upright": "Kỹ năng, sự tập trung, hành động...",
+        "meaning_reversed": "Thao túng, lừa dối..."
+    },
+    {
+        "id": "major_2",
+        "name": "The High Priestess",
+        "image": "/public/tarot-deck/2-High-Priestess-icon.png",
+        "meaning_upright": "Trí tuệ, trực giác, bí ẩn...",
+        "meaning_reversed": "Bí mật bị tiết lộ, thiếu trực giác..."
+    },
+    {
+        "id": "major_3",
+        "name": "The Empress",
+        "image": "/public/tarot-deck/3-Empress-icon.png",
+        "meaning_upright": "Sự sáng tạo, sự nuôi dưỡng, thịnh vượng...",
+        "meaning_reversed": "Sự phụ thuộc, thiếu sáng tạo..."
+    },
+    {
+        "id": "major_4",
+        "name": "The Emperor",
+        "image": "/public/tarot-deck/4-Emperor-icon.png",
+        "meaning_upright": "Quyền lực, sự lãnh đạo, sự ổn định...",
+        "meaning_reversed": "Sự kiểm soát quá mức, sự độc đoán..."
+    },
+    {
+        "id": "major_5",
+        "name": "The Hierophant",
+        "image": "/public/tarot-deck/5-Hierophant-icon.png",
+        "meaning_upright": "Truyền thống, sự hướng dẫn, tôn giáo...",
+        "meaning_reversed": "Sự nổi loạn, sự phá vỡ quy tắc..."
+    },
+    {
+        "id": "major_6",
+        "name": "The Lovers",
+        "image": "/public/tarot-deck/6-Lovers-icon.png",
+        "meaning_upright": "Tình yêu, sự lựa chọn, sự hài hòa...",
+        "meaning_reversed": "Sự chia ly, sự mất cân bằng..."
+    },
+    {
+        "id": "major_7",
+        "name": "The Chariot",
+        "image": "/public/tarot-deck/7-Chariot-icon.png",
+        "meaning_upright": "Ý chí, sự kiểm soát, chiến thắng...",
+        "meaning_reversed": "Sự mất kiểm soát, sự thất bại..."
+    },
+    {
+        "id": "major_8",
+        "name": "Strength",
+        "image": "/public/tarot-deck/8-Strength-icon.png",
+        "meaning_upright": "Sức mạnh nội tâm, lòng dũng cảm, sự kiên nhẫn...",
+        "meaning_reversed": "Sự yếu đuối, sự thiếu kiên nhẫn..."
+    },
+    {
+        "id": "major_9",
+        "name": "The Hermit",
+        "image": "/public/tarot-deck/9-Hermit-icon.png",
+        "meaning_upright": "Sự tìm kiếm, sự cô lập, trí tuệ...",
+        "meaning_reversed": "Sự cô đơn, sự lạc lối..."
+    },
+    {
+        "id": "major_10",
+        "name": "Wheel of Fortune",
+        "image": "/public/tarot-deck/10-Wheel-of-Fortune-icon.png",
+        "meaning_upright": "Sự thay đổi, vận may, chu kỳ...",
+        "meaning_reversed": "Sự xui xẻo, sự trì trệ..."
+    },
+    {
+        "id": "major_11",
+        "name": "Justice",
+        "image": "/public/tarot-deck/11-Justice-icon.png",
+        "meaning_upright": "Công lý, sự thật, trách nhiệm...",
+        "meaning_reversed": "Sự bất công, sự thiếu trách nhiệm..."
+    },
+    {
+        "id": "major_12",
+        "name": "The Hanged Man",
+        "image": "/public/tarot-deck/12-Hanged-Man-icon.png",
+        "meaning_upright": "Sự hy sinh, sự chờ đợi, sự thay đổi quan điểm...",
+        "meaning_reversed": "Sự bướng bỉnh, sự trì hoãn..."
+    },
+    {
+        "id": "major_13",
+        "name": "Death",
+        "image": "/public/tarot-deck/13-Death-icon.png",
+        "meaning_upright": "Sự kết thúc, sự chuyển đổi, sự tái sinh...",
+        "meaning_reversed": "Sự sợ hãi thay đổi, sự trì trệ..."
+    },
+    {
+        "id": "major_14",
+        "name": "Temperance",
+        "image": "/public/tarot-deck/14-Temperance-icon.png",
+        "meaning_upright": "Sự cân bằng, sự kiên nhẫn, sự điều độ...",
+        "meaning_reversed": "Sự mất cân bằng, sự thiếu kiên nhẫn..."
+    },
+    {
+        "id": "major_15",
+        "name": "The Devil",
+        "image": "/public/tarot-deck/15-Devil-icon.png",
+        "meaning_upright": "Sự cám dỗ, sự ràng buộc, sự vật chất...",
+        "meaning_reversed": "Sự giải thoát, sự vượt qua..."
+    },
+    {
+        "id": "major_16",
+        "name": "The Tower",
+        "image": "/public/tarot-deck/16-Tower-icon.png",
+        "meaning_upright": "Sự phá hủy, sự thay đổi đột ngột, sự thức tỉnh...",
+        "meaning_reversed": "Sự trì hoãn thay đổi, sự né tránh..."
+    },
+    {
+        "id": "major_17",
+        "name": "The Star",
+        "image": "/public/tarot-deck/17-Star-icon.png",
+        "meaning_upright": "Hy vọng, sự cảm hứng, sự chữa lành...",
+        "meaning_reversed": "Sự tuyệt vọng, sự thiếu cảm hứng..."
+    },
+    {
+        "id": "major_18",
+        "name": "The Moon",
+        "image": "/public/tarot-deck/18-Moon-icon.png",
+        "meaning_upright": "Trực giác, ảo tưởng, sự không chắc chắn...",
+        "meaning_reversed": "Sự lừa dối, sự sợ hãi..."
+    },
+    {
+        "id": "major_19",
+        "name": "The Sun",
+        "image": "/public/tarot-deck/19-Sun-icon.png",
+        "meaning_upright": "Hạnh phúc, sự thành công, sự sống động...",
+        "meaning_reversed": "Sự buồn bã, sự thất bại..."
+    },
+    {
+        "id": "major_20",
+        "name": "Judgement",
+        "image": "/public/tarot-deck/20-Judgement-icon.png",
+        "meaning_upright": "Sự tái sinh, sự đánh giá lại, sự thức tỉnh...",
+        "meaning_reversed": "Sự tự phán xét, sự trì hoãn..."
+    },
+    {
+        "id": "major_21",
+        "name": "The World",
+        "image": "/public/tarot-deck/21-World-icon.png",
+        "meaning_upright": "Sự hoàn thành, sự hòa hợp, sự du lịch...",
+        "meaning_reversed": "Sự thiếu hoàn thành, sự trì trệ..."
+    },
+    {
+        "id": "minor_wands_ace",
+        "name": "Ace of Wands",
+        "image": "/public/tarot-deck/Ace-of-Wands-icon.png",
+        "meaning_upright": "Khởi đầu mới, sáng tạo, nhiệt huyết...",
+        "meaning_reversed": "Sự trì hoãn, thiếu động lực..."
+    },
+    {
+        "id": "minor_wands_2",
+        "name": "Two of Wands",
+        "image": "/public/tarot-deck/Two-of-Wands-icon.png",
+        "meaning_upright": "Lập kế hoạch, quyết định, khám phá...",
+        "meaning_reversed": "Sự do dự, thiếu tầm nhìn..."
+    },
+    {
+        "id": "minor_wands_3",
+        "name": "Three of Wands",
+        "image": "/public/tarot-deck/Three-of-Wands-icon.png",
+        "meaning_upright": "Tiến triển, mở rộng, cơ hội...",
+        "meaning_reversed": "Sự trì trệ, thiếu tầm nhìn..."
+    },
+    {
+        "id": "minor_wands_4",
+        "name": "Four of Wands",
+        "image": "/public/tarot-deck/Four-of-Wands-icon.png",
+        "meaning_upright": "Ăn mừng, sự ổn định, sự hài hòa...",
+        "meaning_reversed": "Sự bất ổn, thiếu hài hòa..."
+    },
+    {
+        "id": "minor_wands_5",
+        "name": "Five of Wands",
+        "image": "/public/tarot-deck/Five-of-Wands-icon.png",
+        "meaning_upright": "Xung đột, cạnh tranh, thử thách...",
+        "meaning_reversed": "Sự tránh né xung đột, hòa giải..."
+    },
+    {
+        "id": "minor_wands_6",
+        "name": "Six of Wands",
+        "image": "/public/tarot-deck/Six-of-Wands-icon.png",
+        "meaning_upright": "Chiến thắng, công nhận, thành công...",
+        "meaning_reversed": "Sự thất bại, thiếu công nhận..."
+    },
+    {
+        "id": "minor_wands_7",
+        "name": "Seven of Wands",
+        "image": "/public/tarot-deck/Seven-of-Wands-icon.png",
+        "meaning_upright": "Bảo vệ, kiên trì, đối đầu...",
+        "meaning_reversed": "Sự nhượng bộ, thiếu tự tin..."
+    },
+    {
+        "id": "minor_wands_8",
+        "name": "Eight of Wands",
+        "image": "/public/tarot-deck/Eight-of-Wands-icon.png",
+        "meaning_upright": "Tốc độ, tiến triển nhanh, chuyển động...",
+        "meaning_reversed": "Sự trì hoãn, thiếu tiến triển..."
+    },
+    {
+        "id": "minor_wands_9",
+        "name": "Nine of Wands",
+        "image": "/public/tarot-deck/Nine-of-Wands-icon.png",
+        "meaning_upright": "Kiên trì, bảo vệ, sức mạnh nội tâm...",
+        "meaning_reversed": "Sự mệt mỏi, thiếu kiên nhẫn..."
+    },
+    {
+        "id": "minor_wands_10",
+        "name": "Ten of Wands",
+        "image": "/public/tarot-deck/Ten-of-Wands-icon.png",
+        "meaning_upright": "Gánh nặng, trách nhiệm, áp lực...",
+        "meaning_reversed": "Sự giải thoát, giảm bớt gánh nặng..."
+    },
+    {
+        "id": "minor_wands_page",
+        "name": "Page of Wands",
+        "image": "/public/tarot-deck/Page-of-Wands-icon.png",
+        "meaning_upright": "Sự nhiệt huyết, khám phá, tin tức...",
+        "meaning_reversed": "Sự thiếu định hướng, thiếu kiên nhẫn..."
+    },
+    {
+        "id": "minor_wands_knight",
+        "name": "Knight of Wands",
+        "image": "/public/tarot-deck/Knight-of-Wands-icon.png",
+        "meaning_upright": "Sự dũng cảm, hành động nhanh, phiêu lưu...",
+        "meaning_reversed": "Sự nóng vội, thiếu kiên nhẫn..."
+    },
+    {
+        "id": "minor_wands_queen",
+        "name": "Queen of Wands",
+        "image": "/public/tarot-deck/Queen-of-Wands-icon.png",
+        "meaning_upright": "Sự tự tin, sự quyến rũ, sự sáng tạo...",
+        "meaning_reversed": "Sự kiêu ngạo, thiếu tự tin..."
+    },
+    {
+        "id": "minor_wands_king",
+        "name": "King of Wands",
+        "image": "/public/tarot-deck/King-of-Wands-icon.png",
+        "meaning_upright": "Lãnh đạo, tầm nhìn, sự quyết đoán...",
+        "meaning_reversed": "Sự độc đoán, thiếu tầm nhìn..."
+    }
+]
