@@ -1,7 +1,14 @@
 import { motion as Motion } from "framer-motion";
 
 // Component này nhận vào: ảnh mặt trước, tên lá bài, và trạng thái lật (isFlipped)
-const TarotCard = ({ image, name, isFlipped, isReversed, onClick }) => {
+const TarotCard = ({
+  image,
+  name,
+  isFlipped,
+  isReversed,
+  onClick,
+  backImage = "/tarot-deck/matsau.png",
+}) => {
   return (
     <div
       className="relative w-48 h-80 cursor-pointer perspective-1000" // perspective tạo độ sâu 3D
@@ -16,9 +23,8 @@ const TarotCard = ({ image, name, isFlipped, isReversed, onClick }) => {
       >
         {/* MẶT SAU (Úp) - Hiển thị khi chưa lật */}
         <div className="absolute w-full h-full backface-hidden rounded-xl border-2 border-mystic-gold shadow-lg overflow-hidden">
-          {/* Thay đường dẫn ảnh mặt sau của bạn vào đây */}
           <img
-            src="/tarot-deck/card-back.jpg"
+            src={backImage}
             alt="Card Back"
             className="w-full h-full object-cover"
           />
