@@ -1,6 +1,15 @@
-import { motion as Motion } from "framer-motion";
+import { motion } from "framer-motion";
 
-// Component này nhận vào: ảnh mặt trước, tên lá bài, và trạng thái lật (isFlipped)
+/**
+ * Component hiển thị lá bài Tarot với hiệu ứng lật 3D
+ * @param {Object} props - Props của component
+ * @param {string} props.image - Đường dẫn ảnh mặt trước lá bài
+ * @param {string} props.name - Tên lá bài
+ * @param {boolean} props.isFlipped - Trạng thái lật (true = đã lật)
+ * @param {boolean} props.isReversed - Trạng thái ngược/xuôi
+ * @param {Function} props.onClick - Hàm xử lý khi click vào lá bài
+ * @param {string} [props.backImage="/tarot-deck/matsau.png"] - Đường dẫn ảnh mặt sau
+ */
 const TarotCard = ({
   image,
   name,
@@ -11,22 +20,32 @@ const TarotCard = ({
 }) => {
   return (
     <div
-      className="relative w-48 h-80 cursor-pointer perspective-1000" // perspective tạo độ sâu 3D
+      className="relative w-48 h-80 cursor-pointer perspective-1000"
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label={isFlipped ? `Lá bài ${name}` : 'Lá bài chưa lật, nhấn để lật'}
     >
-      <Motion.div
+      <motion.div
         className="w-full h-full relative preserve-3d"
         initial={false}
-        animate={{ rotateY: isFlipped ? 180 : 0 }} // Nếu lật thì xoay 180 độ
-        transition={{ duration: 0.6, animationDirection: "normal" }}
+        animate={{ rotateY: isFlipped ? 180 : 0 }}
+        transition={{ duration: 0.6 }}
         style={{ transformStyle: "preserve-3d" }}
       >
         {/* MẶT SAU (Úp) - Hiển thị khi chưa lật */}
         <div className="absolute w-full h-full backface-hidden rounded-xl border-2 border-mystic-gold shadow-lg overflow-hidden">
           <img
             src={backImage}
-            alt="Card Back"
+            alt="Mặt sau lá bài Tarot"
             className="w-full h-full object-cover"
+            loading="lazy"
           />
           {/* Pattern trang trí đè lên (nếu ảnh đơn giản) */}
           <div className="absolute inset-0 bg-mystic-dark/20"></div>
@@ -39,18 +58,18 @@ const TarotCard = ({
         >
           <img
             src={image}
-            alt={name}
-            //xu ly xoay nguoc lai neu la reversed
+            alt={`Lá bài ${name} ${isReversed ? 'ngược' : 'xuôi'}`}
             className={`w-full h-full object-cover transition-transform duration-500 ${
               isReversed ? "rotate-180" : ""
             }`}
+            loading="lazy"
           />
           {/* Tên lá bài (Luôn nằm xuôi để dễ đọc, hoặc đảo ngược tùy bạn) */}
           <span className="text-mystic-gold text-sm font-bold uppercase tracking-widest">
             {name} {isReversed && "(Ngược)"}
           </span>
         </div>
-      </Motion.div>
+      </motion.div>
     </div>
   );
 };

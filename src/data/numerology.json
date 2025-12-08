@@ -1,0 +1,50 @@
+{
+  "1": {
+    "title": "Người Tiên Phong",
+    "desc": "Bạn có tố chất lãnh đạo bẩm sinh, độc lập, quyết đoán và luôn muốn dẫn đầu. Bài học của bạn là học cách tự đứng trên đôi chân mình."
+  },
+  "2": {
+    "title": "Người Kiến Tạo Hòa Bình",
+    "desc": "Bạn nhạy cảm, giàu tình cảm và có trực giác tốt. Sứ mệnh của bạn là kết nối mọi người và mang lại sự hòa hợp."
+  },
+  "3": {
+    "title": "Người Truyền Cảm Hứng",
+    "desc": "Bạn sáng tạo, hoạt ngôn và có khiếu hài hước. Bạn sinh ra để tỏa sáng và mang niềm vui đến cho đời."
+  },
+  "4": {
+    "title": "Người Xây Dựng",
+    "desc": "Bạn thực tế, kỷ luật và tỉ mỉ. Bạn là chỗ dựa vững chắc cho người khác và giỏi việc quy hoạch, tổ chức."
+  },
+  "5": {
+    "title": "Người Tự Do",
+    "desc": "Bạn yêu thích sự phiêu lưu, ghét sự ràng buộc và luôn tìm kiếm trải nghiệm mới. Bạn có khả năng thích nghi tuyệt vời."
+  },
+  "6": {
+    "title": "Người Chăm Sóc",
+    "desc": "Gia đình là số 1 đối với bạn. Bạn có trách nhiệm, giàu tình yêu thương và luôn muốn che chở cho người khác."
+  },
+  "7": {
+    "title": "Người Đi Tìm Chân Lý",
+    "desc": "Bạn thích chiêm nghiệm, phân tích và có đời sống nội tâm sâu sắc. Bạn học hỏi tốt nhất qua trải nghiệm cá nhân."
+  },
+  "8": {
+    "title": "Người Điều Hành",
+    "desc": "Bạn có duyên với tài chính, quyền lực và kinh doanh. Bài học của bạn là cân bằng giữa vật chất và tinh thần."
+  },
+  "9": {
+    "title": "Người Cho Đi",
+    "desc": "Bạn bao dung, nhân hậu và có lý tưởng lớn vì cộng đồng. Bạn là người hoàn thiện nhất trong các con số."
+  },
+  "11": {
+    "title": "Master - Người Truyền Lửa",
+    "desc": "Con số của trực giác tâm linh cực mạnh. Bạn có khả năng truyền cảm hứng và đánh thức tiềm năng của người khác."
+  },
+  "22": {
+    "title": "Master - Kiến Trúc Sư Đại Tài",
+    "desc": "Bạn có tầm nhìn xa trông rộng và khả năng biến những giấc mơ lớn thành hiện thực."
+  },
+  "33": {
+    "title": "Master - Người Chữa Lành",
+    "desc": "Con số của tình yêu thương vô điều kiện và khả năng chữa lành tâm hồn cho nhân loại."
+  }
+}

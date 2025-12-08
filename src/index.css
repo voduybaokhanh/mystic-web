@@ -2,8 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Thêm màu nền tối cho toàn web cho đúng vibe huyền học */
-body {
-  background-color: #1a1a2e; 
-  color: white;
+@layer base {
+  body {
+    background-color: #1a1a2e; 
+    color: white;
+  }
+}
+
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }

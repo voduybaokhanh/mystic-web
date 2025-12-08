@@ -6,11 +6,19 @@ export default {
   ],
   theme: {
     extend: {
-      // Sau này chúng ta thêm màu "tâm linh" ở đây
       colors: {
         'mystic-dark': '#1a1a2e',
         'mystic-gold': '#c4a248',
-      }
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.5s ease-in',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
     },
   },
   plugins: [],

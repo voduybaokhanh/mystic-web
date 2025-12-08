@@ -1,16 +1,76 @@
+import { useEffect, useRef } from "react";
+
+/**
+ * Modal hiển thị hướng dẫn trải bài Celtic Cross
+ * @param {Object} props - Props của component
+ * @param {boolean} props.isOpen - Trạng thái mở/đóng modal
+ * @param {Function} props.onClose - Hàm đóng modal
+ */
 const GuideModal = ({ isOpen, onClose }) => {
+  const modalRef = useRef(null);
+  const closeButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      closeButtonRef.current?.focus();
+      const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+          onClose();
+        }
+      };
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+      
+      return () => {
+        document.removeEventListener('keydown', handleEscape);
+        document.body.style.overflow = '';
+      };
+    }
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (isOpen && modalRef.current) {
+      const focusableElements = modalRef.current.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements[0];
+      if (firstElement) {
+        firstElement.focus();
+      }
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="bg-mystic-dark border border-mystic-gold rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6 relative shadow-2xl shadow-mystic-gold/20">
-        
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="guide-modal-title"
+    >
+      <div 
+        ref={modalRef}
+        className="bg-mystic-dark border border-mystic-gold rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6 relative shadow-2xl shadow-mystic-gold/20"
+      >
         {/* Nút đóng */}
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+        <button 
+          ref={closeButtonRef}
+          onClick={onClose} 
+          className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl focus:outline-none focus:ring-2 focus:ring-mystic-gold rounded"
+          aria-label="Đóng hướng dẫn"
+        >
+          &times;
+        </button>
 
         {/* Nội dung bạn gửi - Đã format lại */}
         <div className="prose prose-invert max-w-none text-gray-300">
-          <h2 className="text-2xl font-bold text-mystic-gold mb-4 text-center">Luật chơi & Trải bài Celtic Cross</h2>
+          <h2 id="guide-modal-title" className="text-2xl font-bold text-mystic-gold mb-4 text-center">Luật chơi & Trải bài Celtic Cross</h2>
           
           <h3 className="text-xl text-white mt-6 mb-2">1. Chuẩn bị</h3>
           <ul className="list-disc pl-5 space-y-2">
@@ -47,7 +107,11 @@ const GuideModal = ({ isOpen, onClose }) => {
         </div>
         
         <div className="mt-8 text-center">
-          <button onClick={onClose} className="px-6 py-2 bg-mystic-gold text-mystic-dark font-bold rounded hover:bg-white transition">
+          <button 
+            onClick={onClose} 
+            className="px-6 py-2 bg-mystic-gold text-mystic-dark font-bold rounded hover:bg-white transition focus:outline-none focus:ring-2 focus:ring-mystic-gold focus:ring-offset-2 focus:ring-offset-mystic-dark"
+            aria-label="Đóng và bắt đầu trải bài"
+          >
             Đã hiểu, bắt đầu trải bài
           </button>
         </div>

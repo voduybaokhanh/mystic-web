@@ -1,30 +1,39 @@
-import { useState } from 'react';
-import { motion as Motion } from 'framer-motion';
-import TarotCard from './TarotCard'; // Component lá bài bạn đã làm
-import tarotData from "../../data/tarot.json"; // Import dữ liệu
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import TarotCard from './TarotCard';
+import tarotData from "../../data/tarot.json";
+
+/**
+ * Component quản lý bảng trải bài Tarot
+ * Hỗ trợ 3 bước: intro (giới thiệu), shuffling (đang xáo), reading (đọc bài)
+ */
 
 const TarotBoard = () => {
-    // State quản lý trạng thái
-    const [step, setStep] = useState('intro'); // 'intro' | 'shuffling' | 'reading'
+    const [step, setStep] = useState('intro');
     const [selectedCards, setSelectedCards] = useState([]);
-    const [flippedIndices, setFlippedIndices] = useState([]); // Lưu index những lá đã lật
+    const [flippedIndices, setFlippedIndices] = useState([]);
+    const shuffleTimeoutRef = useRef(null);
 
-    // Hàm xào bài (Đã nâng cấp tỷ lệ bài ngược)
+    useEffect(() => {
+        return () => {
+            if (shuffleTimeoutRef.current) {
+                clearTimeout(shuffleTimeoutRef.current);
+            }
+        };
+    }, []);
+
     const shuffleDeck = () => {
         setStep('shuffling');
 
-        setTimeout(() => {
+        shuffleTimeoutRef.current = setTimeout(() => {
             const deck = [...tarotData];
-            // Thuật toán Fisher-Yates để tráo bài
             for (let i = deck.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [deck[i], deck[j]] = [deck[j], deck[i]];
             }
 
-            // Lấy 3 lá đầu tiên và gán trạng thái Ngược/Xuôi
             const picked = deck.slice(0, 3).map(card => ({
                 ...card,
-                // Logic: Sinh số ngẫu nhiên từ 0-1. Nếu nhỏ hơn 0.3 (30%) thì là ngược
                 isReversed: Math.random() < 0.3
             }));
 
@@ -59,7 +68,8 @@ const TarotBoard = () => {
                     </div>
                     <button
                         onClick={shuffleDeck}
-                        className="px-8 py-3 bg-mystic-gold text-mystic-dark font-bold rounded-full hover:bg-white transition-all shadow-[0_0_20px_rgba(196,162,72,0.5)]"
+                        className="px-8 py-3 bg-mystic-gold text-mystic-dark font-bold rounded-full hover:bg-white transition-all shadow-[0_0_20px_rgba(196,162,72,0.5)] focus:outline-none focus:ring-2 focus:ring-mystic-gold focus:ring-offset-2 focus:ring-offset-mystic-dark"
+                        aria-label="Tráo bài và rút 3 lá bài Tarot"
                     >
                         🔮 Tráo bài & Rút 3 lá
                     </button>
@@ -68,8 +78,8 @@ const TarotBoard = () => {
 
             {/* PHẦN 2: Hiệu ứng đang xào bài */}
             {step === 'shuffling' && (
-                <div className="flex flex-col items-center justify-center h-96">
-                    <div className="animate-spin text-5xl mb-4">💫</div>
+                <div className="flex flex-col items-center justify-center h-96" role="status" aria-live="polite">
+                    <div className="animate-spin text-5xl mb-4" aria-hidden="true">💫</div>
                     <p className="text-mystic-gold animate-pulse">Vũ trụ đang kết nối...</p>
                 </div>
             )}
@@ -98,7 +108,14 @@ const TarotBoard = () => {
                                     />
 
                                     {/* Chỉ hiện ý nghĩa khi đã lật */}
-                                    <Motion.div className={`text-center transition-opacity duration-500 ${isFlipped ? 'opacity-100' : 'opacity-0'}`}>
+                                    <motion.div 
+                                        className={`text-center transition-opacity duration-500 ${isFlipped ? 'opacity-100' : 'opacity-0'}`}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: isFlipped ? 1 : 0 }}
+                                        transition={{ duration: 0.5 }}
+                                        role="region"
+                                        aria-live="polite"
+                                    >
                                         <h4 className="text-xl font-bold text-mystic-gold">
                                             {card.name} <span className="text-sm text-gray-400">{card.isReversed ? '(Ngược)' : '(Xuôi)'}</span>
                                         </h4>
@@ -108,7 +125,7 @@ const TarotBoard = () => {
                                                 : (card.meaning_upright || "Chưa có dữ liệu xuôi")
                                             }
                                         </p>
-                                    </Motion.div>
+                                    </motion.div>
                                 </div>
                             );
                         })}
@@ -118,8 +135,10 @@ const TarotBoard = () => {
                     <div className="text-center pb-10">
                         <button
                             onClick={resetReading}
-                            className="text-gray-400 hover:text-white underline decoration-mystic-gold underline-offset-4"
-                        >Thực hiện trải bài khác
+                            className="text-gray-400 hover:text-white underline decoration-mystic-gold underline-offset-4 focus:outline-none focus:ring-2 focus:ring-mystic-gold focus:ring-offset-2 focus:ring-offset-mystic-dark rounded px-2"
+                            aria-label="Thực hiện trải bài mới"
+                        >
+                            Thực hiện trải bài khác
                         </button>
                     </div>
                 </div>
