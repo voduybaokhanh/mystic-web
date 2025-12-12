@@ -85,7 +85,6 @@
   },
   
   "output_format": {
-    "length": "800-1200 từ",
     "paragraphs": "4-6 đoạn văn mạch lạc",
     "style": "Không dùng header, để văn chảy tự nhiên như một câu chuyện, in đậm tên lá bài khi đề cập",
     "language": "Tiếng Việt tự nhiên"
