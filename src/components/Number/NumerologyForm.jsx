@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import numerologyData from "../../data/numerology.json";
+import { validateBirthDate } from "../../utils/dateValidation.js";
+import { calculateLifePath } from "../../utils/numerology.js";
 
 /**
  * Component tính toán và hiển thị số chủ đạo theo Thần Số Học
  * Sử dụng ngày sinh để tính Life Path Number
  */
-
 const NumerologyTool = () => {
   const [birthDate, setBirthDate] = useState("");
   const [fullName, setFullName] = useState("");
@@ -14,69 +15,25 @@ const NumerologyTool = () => {
   const [error, setError] = useState("");
 
   /**
-   * Rút gọn số về một chữ số (1-9) hoặc giữ Master Numbers (11, 22, 33)
-   * @param {number} num - Số cần rút gọn
-   * @returns {number} - Số đã rút gọn
-   */
-  const reduceNumber = (num) => {
-    if (num === 11 || num === 22 || num === 33) return num;
-    if (num < 10) return num;
-
-    // Cộng dồn các chữ số
-    let sum = 0;
-    const digits = num.toString().split("").map(Number);
-    digits.forEach((n) => (sum += n));
-
-    // Đệ quy: Nếu cộng xong vẫn > 9 và không phải master thì cộng tiếp
-    return reduceNumber(sum);
-  };
-
-  /**
    * Tính số chủ đạo từ ngày sinh
    * Cộng tổng ngày + tháng + năm, sau đó rút gọn
    */
-  const calculateLifePath = () => {
+  const handleCalculateLifePath = () => {
     setError("");
     setResult(null);
 
-    if (!birthDate) {
-      setError("Vui lòng nhập ngày sinh");
+    // Sử dụng utility function để validate
+    const validation = validateBirthDate(birthDate);
+    
+    if (!validation.isValid) {
+      setError(validation.error);
       return;
     }
 
-    const [year, month, day] = birthDate.split("-").map(Number);
-
-    if (!year || !month || !day || isNaN(year) || isNaN(month) || isNaN(day)) {
-      setError("Ngày sinh không hợp lệ");
-      return;
-    }
-
-    if (year < 1900 || year > new Date().getFullYear()) {
-      setError("Năm sinh không hợp lệ");
-      return;
-    }
-
-    if (month < 1 || month > 12) {
-      setError("Tháng sinh không hợp lệ");
-      return;
-    }
-
-    if (day < 1 || day > 31) {
-      setError("Ngày sinh không hợp lệ");
-      return;
-    }
-
-    // Bước 1: Rút gọn từng thành phần
-    const rDay = reduceNumber(day);
-    const rMonth = reduceNumber(month);
-    const rYear = reduceNumber(year);
-
-    // Bước 2: Cộng tổng
-    let total = rDay + rMonth + rYear;
-
-    // Bước 3: Rút gọn kết quả cuối cùng
-    const finalNumber = reduceNumber(total);
-
+    const { year, month, day } = validation.date;
+    
+    // Sử dụng utility function để tính toán
+    const finalNumber = calculateLifePath(year, month, day);
     setResult(finalNumber);
   };
 
@@ -119,8 +76,8 @@ const NumerologyTool = () => {
             className="w-full p-3 bg-black/50 border border-gray-600 rounded text-white focus:border-mystic-gold focus:ring-2 focus:ring-mystic-gold outline-none"
             aria-label="Ngày sinh dương lịch"
             aria-required="true"
-            aria-invalid={error ? "true" : "false"}
-            aria-describedby={error ? "birthDateError" : undefined}
+            aria-invalid={!!error}
+            {...(error && { "aria-describedby": "birthDateError" })}
           />
           {error && (
             <p id="birthDateError" className="text-red-400 text-sm mt-1" role="alert">
@@ -130,7 +87,7 @@ const NumerologyTool = () => {
         </div>
 
         <button
-          onClick={calculateLifePath}
+          onClick={handleCalculateLifePath}
           className="w-full py-3 mt-4 bg-mystic-gold text-mystic-dark font-bold text-lg rounded hover:bg-white transition-all shadow-[0_0_15px_rgba(196,162,72,0.4)] focus:outline-none focus:ring-2 focus:ring-mystic-gold focus:ring-offset-2 focus:ring-offset-mystic-dark"
           aria-label="Tính số chủ đạo từ ngày sinh"
         >

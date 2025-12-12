@@ -1,11 +1,6 @@
 import React from 'react';
 import TarotCard from './TarotCard';
-
-const POSITIONS = [
-  "1. Hiện tại", "2. Thử thách", "3. Quá khứ", "4. Tương lai", 
-  "5. Nhận thức", "6. Tiềm thức", "7. Lời khuyên", 
-  "8. Ảnh hưởng bên ngoài", "9. Hy vọng/Sợ hãi", "10. Kết quả"
-];
+import { POSITION_NAMES_CELTIC } from '../../constants/tarotConstants.js';
 
 const CelticCrossLayout = ({ cards, flippedIndices, onCardClick }) => {
   // Helper để render lá bài gọn gàng hơn
@@ -18,7 +13,7 @@ const CelticCrossLayout = ({ cards, flippedIndices, onCardClick }) => {
         <div className="relative transform hover:scale-105 transition-transform duration-300">
           {/* Label vị trí nhỏ phía trên lá bài */}
           <span className="absolute -top-6 left-0 w-full text-center text-[10px] text-mystic-gold uppercase tracking-wider opacity-70">
-            {POSITIONS[index]}
+            {POSITION_NAMES_CELTIC[index]}
           </span>
           
           <TarotCard

@@ -1,6 +1,43 @@
 # mystic-web
 
-Luật chơi bài Tarot (cho bói bài)
+Ứng dụng web Tarot và Thần Số Học với AI Reader
+
+## 🚀 Cài đặt và Chạy
+
+```bash
+# Cài đặt dependencies
+npm install
+
+# Chạy development server
+npm run dev
+
+# Build production
+npm run build
+```
+
+## 🔑 Cấu hình AI Reader (Tùy chọn)
+
+Để sử dụng tính năng AI Reader, bạn cần:
+
+1. Lấy API key từ [Google AI Studio](https://aistudio.google.com/app/apikey)
+2. Tạo file `.env` trong thư mục gốc:
+```env
+VITE_GOOGLE_AI_API_KEY=your_actual_api_key_here
+```
+3. Restart development server
+
+**Lưu ý:** Nếu không cấu hình API key, bạn vẫn có thể sử dụng ứng dụng để xem ý nghĩa các lá bài, chỉ không có tính năng AI tổng hợp lời giải.
+
+## 📁 Cấu trúc Project
+
+- `src/components/` - React components
+- `src/services/` - API services (AI service)
+- `src/utils/` - Utility functions
+- `src/constants/` - Constants và configs
+- `src/data/` - Dữ liệu Tarot và Numerology
+- `dist/` - Build output (tự động tạo, không cần commit)
+
+## 📖 Luật chơi bài Tarot
 
 ## Chuẩn bị:
 

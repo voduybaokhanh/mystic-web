@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { motion } from "framer-motion";
 
 /**
@@ -10,7 +11,7 @@ import { motion } from "framer-motion";
  * @param {Function} props.onClick - Hàm xử lý khi click vào lá bài
  * @param {string} [props.backImage="/tarot-deck/matsau.png"] - Đường dẫn ảnh mặt sau
  */
-const TarotCard = ({
+const TarotCard = memo(({
   image,
   name,
   isFlipped,
@@ -72,6 +73,8 @@ const TarotCard = ({
       </motion.div>
     </div>
   );
-};
+});
+
+TarotCard.displayName = 'TarotCard';
 
 export default TarotCard;

@@ -1,46 +1,169 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { POSITION_NAMES_THREE_CARD, POSITION_NAMES_CELTIC } from "../constants/tarotConstants.js";
+import tarotData from "../data/tarot.json";
+import promptConfig from "../data/prompt.json";
 
 // ⚠️ QUAN TRỌNG: Nếu đưa lên mạng (deploy), không được để lộ Key ở đây.
 // Nhưng chạy Localhost demo cho khách thì thoải mái.
-const API_KEY = import.meta.env.VITE_GOOGLE_AI_API_KEY;
-const genAI = new GoogleGenerativeAI(API_KEY);
+const GEMINI_API_KEY = import.meta.env.VITE_GOOGLE_AI_API_KEY;
 
+// Chỉ dùng model gemini-1.5-flash (hỗ trợ free tier)
+const GEMINI_MODEL = "gemini-2.5-flash";
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent`;
+
+/**
+ * Validate API key trước khi sử dụng
+ * @returns {{isValid: boolean, message?: string}} - Kết quả validation
+ */
+const validateApiKey = () => {
+  if (!GEMINI_API_KEY) {
+    return { 
+      isValid: false, 
+      message: "API key chưa được cấu hình. Vui lòng tạo file .env với VITE_GOOGLE_AI_API_KEY" 
+    };
+  }
+  
+  if (typeof GEMINI_API_KEY !== 'string' || GEMINI_API_KEY.trim().length === 0) {
+    return { 
+      isValid: false, 
+      message: "API key không hợp lệ. Vui lòng kiểm tra lại file .env" 
+    };
+  }
+  
+  if (GEMINI_API_KEY === 'your_api_key_here' || GEMINI_API_KEY.includes('example')) {
+    return { 
+      isValid: false, 
+      message: "Vui lòng thay thế API key mẫu bằng API key thật của bạn" 
+    };
+  }
+  
+  return { isValid: true };
+};
+
+/**
+ * Lấy bài đọc Tarot từ AI
+ * @param {Array} cards - Mảng các lá bài đã chọn
+ * @param {Object} spreadType - Loại trải bài
+ * @returns {Promise<string>} - Lời giải từ AI hoặc thông báo lỗi
+ */
 export const getTarotReading = async (cards, spreadType) => {
+  // Validate API key
+  const apiKeyValidation = validateApiKey();
+  if (!apiKeyValidation.isValid) {
+    return `⚠️ ${apiKeyValidation.message}\n\nHướng dẫn:\n1. Tạo file .env trong thư mục gốc\n2. Thêm dòng: VITE_GOOGLE_AI_API_KEY=your_actual_api_key\n3. Lấy API key tại: https://aistudio.google.com/app/apikey\n\nHãy tự chiêm nghiệm các lá bài nhé.`;
+  }
+
+  // Validate input
+  if (!cards || cards.length === 0) {
+    return "Không có lá bài nào để phân tích. Vui lòng rút bài trước.";
+  }
+
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
     // 1. Chuẩn bị dữ liệu để gửi cho AI
+    const positionNames = spreadType.id === 'three' 
+      ? POSITION_NAMES_THREE_CARD 
+      : POSITION_NAMES_CELTIC;
+
+    // Tạo mô tả chi tiết từng lá bài với thông tin đầy đủ từ tarot.json
     const cardDescriptions = cards.map((card, index) => {
-      const positionName = spreadType.id === 'three' 
-        ? ["Quá Khứ", "Hiện Tại", "Tương Lai"][index]
-        : `Vị trí số ${index + 1}`; // Với Celtic Cross
-      
+      const positionName = positionNames[index] || `Vị trí số ${index + 1}`;
       const status = card.isReversed ? "Ngược" : "Xuôi";
-      return `- ${positionName}: Lá ${card.name} (${status}). Ý nghĩa cơ bản: ${card.isReversed ? card.meaning_reversed : card.meaning_upright}`;
-    }).join("\n");
-
-    // 2. Viết câu lệnh (Prompt) ra lệnh cho AI
-    const prompt = `
-      Bạn là một Tarot Reader chuyên nghiệp, giọng văn huyền bí, nhẹ nhàng, sâu sắc và chữa lành (healing).
-      Hãy tổng hợp và giải bài dựa trên các lá bài sau đây theo trải bài "${spreadType.name}":
       
-      ${cardDescriptions}
+      // Tìm thông tin đầy đủ từ tarotData nếu có
+      const fullCardData = tarotData.find(c => c.id === card.id || c.name === card.name);
+      const meaning = card.isReversed 
+        ? (card.meaning_reversed || fullCardData?.meaning_reversed || card.meaning_upright || fullCardData?.meaning_upright || "Ý nghĩa đang được cập nhật")
+        : (card.meaning_upright || fullCardData?.meaning_upright || "Ý nghĩa đang được cập nhật");
+      
+      return {
+        position: positionName,
+        name: card.name,
+        status: status,
+        meaning: meaning,
+        id: card.id
+      };
+    });
 
-      Yêu cầu:
-      1. Đừng chỉ liệt kê lại ý nghĩa từng lá. Hãy xâu chuỗi chúng lại thành một câu chuyện hoặc một lời khuyên tổng thể.
-      2. Tìm mối liên hệ giữa các lá bài (Ví dụ: Lá quá khứ ảnh hưởng gì đến hiện tại).
-      3. Kết luận bằng một lời khuyên hành động cụ thể cho người xem (Querent).
-      4. Dùng xưng hô "bạn" và "vũ trụ".
-      5. Trả về kết quả ngắn gọn dưới 300 từ, chia đoạn rõ ràng.
-    `;
+    // 2. Tạo prompt chi tiết với context về Tarot
+    const cardDetailsText = cardDescriptions.map(card => 
+      `- ${card.position}: Lá "${card.name}" (${card.status})\n  Ý nghĩa: ${card.meaning}`
+    ).join("\n\n");
 
-    // 3. Gửi yêu cầu
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    return response.text();
+    const prompt = `${JSON.stringify(promptConfig, null, 2)}
+
+CONTEXT:
+- Trải bài: ${spreadType.name}
+- Các lá bài: ${cardDetailsText}
+
+Hãy giải bài theo hệ thống trên.`;
+
+    // 3. Gửi yêu cầu qua REST API
+    const parts = [{ text: prompt }];
+    
+    const geminiResp = await fetch(
+      `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts }],
+          generationConfig: {
+            temperature: 0.7,
+            topK: 40,
+            topP: 0.95,
+          },
+        }),
+      }
+    );
+
+    if (!geminiResp.ok) {
+      const errorData = await geminiResp.json().catch(() => ({}));
+      const errorMsg = errorData.error?.message || errorData.message || `HTTP ${geminiResp.status}: ${geminiResp.statusText}`;
+      
+      // Log chi tiết trong dev mode để debug
+      if (import.meta.env.DEV) {
+        // eslint-disable-next-line no-console
+        console.error("API Error Details:", {
+          status: geminiResp.status,
+          statusText: geminiResp.statusText,
+          error: errorData,
+          url: GEMINI_API_URL,
+          model: GEMINI_MODEL
+        });
+      }
+      
+      throw new Error(errorMsg);
+    }
+
+    const data = await geminiResp.json();
+    
+    // Extract text từ response
+    const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    
+    if (!responseText) {
+      throw new Error("Không nhận được phản hồi từ AI");
+    }
+    
+    return responseText;
     
   } catch (error) {
-    console.error("Lỗi gọi AI:", error);
-    return "Vũ trụ đang bị nhiễu sóng (Lỗi kết nối AI). Hãy thử lại sau giây lát hoặc tự chiêm nghiệm các lá bài nhé.";
+    // Không dùng console.error, trả về thông báo lỗi thân thiện
+    const errorMessage = error?.message || "Lỗi không xác định";
+    
+    // Trong development, có thể log để debug
+    if (import.meta.env.DEV) {
+      // eslint-disable-next-line no-console
+      console.error("Lỗi khi lấy bài đọc Tarot từ AI:", errorMessage);
+    }
+    
+    // Thông báo lỗi chi tiết hơn nếu là lỗi API
+    if (errorMessage.includes("API_KEY") || errorMessage.includes("401") || errorMessage.includes("403")) {
+      return "⚠️ API key không hợp lệ hoặc đã hết hạn. Vui lòng kiểm tra lại API key trong file .env\n\nHãy tự chiêm nghiệm các lá bài nhé.";
+    }
+    
+    if (errorMessage.includes("429") || errorMessage.includes("quota") || errorMessage.includes("exceeded")) {
+      return "⚠️ Đã vượt quá giới hạn sử dụng API.\n\nVui lòng:\n- Kiểm tra quota tại: https://ai.dev/usage?tab=rate-limit\n- Hoặc đợi một chút rồi thử lại\n\nHãy tự chiêm nghiệm các lá bài nhé.";
+    }
+    
+    return `Vũ trụ đang bị nhiễu sóng (Lỗi: ${errorMessage}). Hãy thử lại sau giây lát hoặc tự chiêm nghiệm các lá bài nhé.`;
   }
 };

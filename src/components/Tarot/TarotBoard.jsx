@@ -1,28 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import TarotCard from "./TarotCard";
-import CelticCrossLayout from "./CelticCrossLayout"; // Đảm bảo bạn đã tạo file này
+import CelticCrossLayout from "./CelticCrossLayout";
+import CardMeaningDisplay from "./CardMeaningDisplay";
 import tarotData from "../../data/tarot.json";
 import { getTarotReading } from "../../services/aiService.js";
-
-// Định nghĩa các loại trải bài
-const SPREAD_TYPES = {
-  THREE_CARD: { id: "three", name: "Trải 3 lá (Thời gian)", count: 3 },
-  CELTIC_CROSS: { id: "celtic", name: "Celtic Cross (Chi tiết)", count: 10 },
-};
-
-const POSITION_NAMES_CELTIC = [
-  "1. Hiện tại",
-  "2. Thử thách",
-  "3. Quá khứ",
-  "4. Tương lai",
-  "5. Nhận thức",
-  "6. Tiềm thức",
-  "7. Lời khuyên",
-  "8. Ảnh hưởng bên ngoài",
-  "9. Hy vọng/Sợ hãi",
-  "10. Kết quả",
-];
+import { 
+  SPREAD_TYPES, 
+  POSITION_NAMES_CELTIC, 
+  POSITION_NAMES_THREE_CARD,
+  REVERSED_PROBABILITY,
+  SHUFFLE_DELAY_MS 
+} from "../../constants/tarotConstants.js";
+import { fisherYatesShuffle } from "../../utils/shuffle.js";
 
 const TarotBoard = () => {
   const [step, setStep] = useState("intro"); // 'intro' | 'shuffling' | 'reading'
@@ -44,25 +34,20 @@ const TarotBoard = () => {
     setStep("shuffling");
 
     shuffleTimeoutRef.current = setTimeout(() => {
-      const deck = [...tarotData];
-
-      // Thuật toán xào bài Fisher-Yates
-      for (let i = deck.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [deck[i], deck[j]] = [deck[j], deck[i]];
-      }
+      // Sử dụng utility function để shuffle
+      const shuffledDeck = fisherYatesShuffle(tarotData);
 
       // Lấy số lượng lá tùy theo loại trải bài (3 hoặc 10)
       const count = spreadType.count;
-      const picked = deck.slice(0, count).map((card) => ({
+      const picked = shuffledDeck.slice(0, count).map((card) => ({
         ...card,
-        isReversed: Math.random() < 0.3, // 30% tỷ lệ bài ngược
+        isReversed: Math.random() < REVERSED_PROBABILITY,
       }));
 
       setSelectedCards(picked);
       setFlippedIndices([]);
       setStep("reading");
-    }, 1500);
+    }, SHUFFLE_DELAY_MS);
   };
 
   const handleCardClick = (index) => {
@@ -83,9 +68,17 @@ const TarotBoard = () => {
 
   const handleAskAI = async () => {
     setIsAiLoading(true);
-    const result = await getTarotReading(selectedCards, spreadType);
-    setAiReading(result);
-    setIsAiLoading(false);
+    setAiReading(""); // Clear previous reading
+    
+    try {
+      const result = await getTarotReading(selectedCards, spreadType);
+      setAiReading(result);
+    } catch {
+      // Fallback error handling - error đã được xử lý trong getTarotReading
+      setAiReading("Đã xảy ra lỗi khi kết nối với AI. Vui lòng thử lại sau hoặc tự chiêm nghiệm các lá bài.");
+    } finally {
+      setIsAiLoading(false);
+    }
   };
 
   return (
@@ -158,28 +151,12 @@ const TarotBoard = () => {
                 {selectedCards.map((card, index) => {
                   if (!flippedIndices.includes(index)) return null;
                   return (
-                    <motion.div
+                    <CardMeaningDisplay
                       key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="bg-white/5 p-6 rounded-lg border border-white/10"
-                    >
-                      <div className="flex justify-between items-start mb-2">
-                        <h4 className="text-mystic-gold font-bold text-lg">
-                          {POSITION_NAMES_CELTIC[index]}
-                        </h4>
-                        <span className="text-xs bg-black/50 px-2 py-1 rounded text-gray-400">
-                          {card.name} {card.isReversed ? "(Ngược)" : "(Xuôi)"}
-                        </span>
-                      </div>
-                      <p className="text-gray-300 text-justify leading-relaxed">
-                        {card.isReversed
-                          ? card.meaning_reversed ||
-                            "Đang cập nhật ý nghĩa ngược..."
-                          : card.meaning_upright ||
-                            "Đang cập nhật ý nghĩa xuôi..."}
-                      </p>
-                    </motion.div>
+                      card={card}
+                      positionName={POSITION_NAMES_CELTIC[index]}
+                      showPosition={true}
+                    />
                   );
                 })}
                 {flippedIndices.length === 0 && (
@@ -191,14 +168,12 @@ const TarotBoard = () => {
             </>
           )}
 
-          {/* TRƯỜNG HỢP 2: TRẢI BÀI 3 LÁ (CŨ) */}
+          {/* TRƯỜNG HỢP 2: TRẢI BÀI 3 LÁ */}
           {spreadType.id === "three" && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center mb-10 mt-10">
               {selectedCards.map((card, index) => {
                 const isFlipped = flippedIndices.includes(index);
-                const positionTitle = ["Quá Khứ", "Hiện Tại", "Tương Lai"][
-                  index
-                ];
+                const positionTitle = POSITION_NAMES_THREE_CARD[index];
 
                 return (
                   <div
@@ -218,26 +193,21 @@ const TarotBoard = () => {
                     />
 
                     {/* Hiển thị ý nghĩa ngay bên dưới lá bài (cho gọn với 3 lá) */}
-                    <motion.div
-                      className={`text-center transition-opacity duration-500 ${
-                        isFlipped ? "opacity-100" : "opacity-0"
-                      }`}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: isFlipped ? 1 : 0 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <h4 className="text-xl font-bold text-mystic-gold">
-                        {card.name}{" "}
-                        <span className="text-sm text-gray-400">
-                          {card.isReversed ? "(Ngược)" : "(Xuôi)"}
-                        </span>
-                      </h4>
-                      <p className="text-sm text-gray-300 mt-2 text-justify bg-black/30 p-3 rounded border border-mystic-gold/30">
-                        {card.isReversed
-                          ? card.meaning_reversed || "Chưa có dữ liệu ngược"
-                          : card.meaning_upright || "Chưa có dữ liệu xuôi"}
-                      </p>
-                    </motion.div>
+                    {isFlipped && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                        className="text-center w-full"
+                      >
+                        <CardMeaningDisplay
+                          card={card}
+                          positionName={positionTitle}
+                          showPosition={false}
+                          className="bg-black/30 border-mystic-gold/30 text-sm"
+                        />
+                      </motion.div>
+                    )}
                   </div>
                 );
               })}
@@ -288,7 +258,9 @@ const TarotBoard = () => {
                     <span>🤖</span> Thông điệp từ Vũ Trụ (AI Reader)
                   </h3>
 
-                  <div className="prose prose-invert prose-p:text-gray-200 prose-strong:text-mystic-gold max-w-none text-justify leading-relaxed whitespace-pre-line font-serif text-lg">
+                  <div className={`prose prose-invert prose-p:text-gray-200 prose-strong:text-mystic-gold max-w-none text-justify leading-relaxed whitespace-pre-line font-serif text-lg ${
+                    aiReading.startsWith('⚠️') ? 'text-yellow-400' : ''
+                  }`}>
                     {/* Hiển thị text từ AI */}
                     {aiReading}
                   </div>
