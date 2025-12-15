@@ -5,7 +5,7 @@ import { validateBirthDate } from "../../utils/dateValidation.js";
 import { calculateLifePath } from "../../utils/numerology.js";
 
 /**
- * Component tính toán và hiển thị số chủ đạo theo Thần Số Học
+ * Component tính toán và hiển thị số chủ đạo theo Nhân số học
  * Sử dụng ngày sinh để tính Life Path Number
  */
 const NumerologyTool = () => {
@@ -40,7 +40,7 @@ const NumerologyTool = () => {
   return (
     <div className="w-full max-w-2xl mx-auto p-6 bg-white/5 rounded-xl border border-mystic-gold/30 mt-10">
       <h2 className="text-3xl text-center font-bold text-mystic-gold mb-6 uppercase tracking-widest">
-        Tra cứu Thần Số Học
+        Tra cứu Nhân số học
       </h2>
 
       {/* FORM NHẬP LIỆU */}
@@ -104,7 +104,7 @@ const NumerologyTool = () => {
           className="mt-8 text-center border-t border-white/10 pt-6"
           role="region"
           aria-live="polite"
-          aria-label="Kết quả thần số học"
+          aria-label="Kết quả Nhân số học"
         >
           <p className="text-gray-400">Số Chủ Đạo của bạn là:</p>
 

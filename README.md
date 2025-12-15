@@ -1,6 +1,6 @@
 # mystic-web
 
-Ứng dụng web Tarot và Thần Số Học với AI Reader
+Ứng dụng web Tarot và Nhân số học với AI Reader
 
 ## 🚀 Cài đặt và Chạy
 
@@ -21,9 +21,11 @@ npm run build
 
 1. Lấy API key từ [Google AI Studio](https://aistudio.google.com/app/apikey)
 2. Tạo file `.env` trong thư mục gốc:
+
 ```env
 VITE_GOOGLE_AI_API_KEY=your_actual_api_key_here
 ```
+
 3. Restart development server
 
 **Lưu ý:** Nếu không cấu hình API key, bạn vẫn có thể sử dụng ứng dụng để xem ý nghĩa các lá bài, chỉ không có tính năng AI tổng hợp lời giải.
@@ -53,7 +55,8 @@ VITE_GOOGLE_AI_API_KEY=your_actual_api_key_here
 
 ## Ý nghĩa các vị trí lá bài:
 
-### 
+###
+
 Lá 1: Hiện tại
 
 Lá 2: Thử thách. Lá bài này thể hiện những thử thách hay vấn đề trước mắt mà người hỏi đang phải đối mặt. Khúc mắc này nếu được giải quyết sẽ giúp cuộc sống trở nên dễ dàng hơn nhiều. Thậm chí nếu bạn rút được một lá bài tích cực ở vị trí này, hãy xem xét nó cẩn thận vì nó vẫn thể hiện một thử thách.

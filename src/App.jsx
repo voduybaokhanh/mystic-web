@@ -2,6 +2,7 @@ import { useState } from "react";
 import TarotBoard from "./components/Tarot/TarotBoard";
 import NumerologyTool from "./components/Number/NumerologyForm";
 import GuideModal from "./components/GuideModal/Guide_Tarot";
+import ZodiacMatch from "./components/Zodiac/ZodiacMatch";
 
 function App() {
   const [activeTab, setActiveTab] = useState("tarot"); // 'tarot' hoặc 'numerology'
@@ -37,10 +38,21 @@ function App() {
                 ? "bg-mystic-gold text-mystic-dark font-bold shadow-lg"
                 : "bg-white/5 text-gray-400 hover:bg-white/10"
             }`}
-            aria-label="Chuyển sang tab Thần Số Học"
+            aria-label="Chuyển sang tab Nhân số học"
             aria-pressed={activeTab === "numerology"}
           >
-            🔢 Thần Số Học
+            🔢 Nhân số học
+          </button>
+
+          <button
+            onClick={() => setActiveTab("zodiac")}
+            className={`px-4 py-2 md:px-6 rounded-full transition-all border border-transparent ${
+              activeTab === "zodiac"
+                ? "bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold shadow-lg shadow-pink-500/30"
+                : "bg-white/5 text-gray-400 hover:bg-white/10 hover:border-white/20"
+            }`}
+          >
+            💘 Bói Tình Duyên
           </button>
         </div>
       </header>
@@ -64,10 +76,16 @@ function App() {
           </div>
         )}
 
-        {/* TAB THẦN SỐ HỌC */}
+        {/* TAB Nhân số học */}
         {activeTab === "numerology" && (
           <div className="animate-fade-in">
             <NumerologyTool />
+          </div>
+        )}
+
+        {activeTab === "zodiac" && (
+          <div className="animate-fade-in">
+            <ZodiacMatch />
           </div>
         )}
       </main>
