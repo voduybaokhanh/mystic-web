@@ -1,0 +1,14 @@
+[
+{ "id": "aries", "name": "Bạch Dương", "dates": "21/3 - 19/4", "element": "Lửa", "icon": "♈" },
+  { "id": "taurus", "name": "Kim Ngưu", "dates": "20/4 - 20/5", "element": "Đất", "icon": "♉" },
+  { "id": "gemini", "name": "Song Tử", "dates": "21/5 - 20/6", "element": "Khí", "icon": "♊" },
+  { "id": "cancer", "name": "Cự Giải", "dates": "21/6 - 22/7", "element": "Nước", "icon": "♋" },
+  { "id": "leo", "name": "Sư Tử", "dates": "23/7 - 22/8", "element": "Lửa", "icon": "♌" },
+  { "id": "virgo", "name": "Xử Nữ", "dates": "23/8 - 22/9", "element": "Đất", "icon": "♍" },
+  { "id": "libra", "name": "Thiên Bình", "dates": "23/9 - 22/10", "element": "Khí", "icon": "♎" },
+  { "id": "scorpio", "name": "Bọ Cạp", "dates": "23/10 - 21/11", "element": "Nước", "icon": "♏" },
+  { "id": "sagittarius", "name": "Nhân Mã", "dates": "22/11 - 21/12", "element": "Lửa", "icon": "♐" },
+  { "id": "capricorn", "name": "Ma Kết", "dates": "22/12 - 19/1", "element": "Đất", "icon": "♑" },
+  { "id": "aquarius", "name": "Bảo Bình", "dates": "20/1 - 18/2", "element": "Khí", "icon": "♒" },
+  { "id": "pisces", "name": "Song Ngư", "dates": "19/2 - 20/3", "element": "Nước", "icon": "♓" }
+]
