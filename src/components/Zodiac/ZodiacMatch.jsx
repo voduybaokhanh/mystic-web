@@ -12,9 +12,14 @@ const ZodiacMatch = () => {
   const handleAnalyze = async () => {
     if (!person1 || !person2) return;
     setLoading(true);
-    const aiResponse = await getZodiacCompatibility(person1, person2);
-    setResult(aiResponse);
-    setLoading(false);
+    setResult("");
+
+    try {
+      const aiResponse = await getZodiacCompatibility(person1, person2);
+      setResult(aiResponse);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -53,7 +58,7 @@ const ZodiacMatch = () => {
               className="text-center mt-4"
             >
               <div className="text-6xl">{person1.icon}</div>
-              <p className="text-gray-400 text-sm mt-2">{person1.element}</p>
+              <p className="text-black text-sm mt-2">{person1.element}</p>
             </motion.div>
           )}
         </div>
@@ -88,7 +93,7 @@ const ZodiacMatch = () => {
               className="text-center mt-4"
             >
               <div className="text-6xl">{person2.icon}</div>
-              <p className="text-gray-400 text-sm mt-2">{person2.element}</p>
+              <p className="text-black text-sm mt-2">{person2.element}</p>
             </motion.div>
           )}
         </div>

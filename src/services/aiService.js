@@ -13,6 +13,9 @@ const GEMINI_API_KEY = import.meta.env.VITE_GOOGLE_AI_API_KEY;
 const GEMINI_MODEL = "gemini-2.5-flash";
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent`;
 
+// Tránh stringify lại nhiều lần cho cùng một cấu hình prompt
+const PROMPT_CONFIG_TEXT = JSON.stringify(promptConfig, null, 2);
+
 /**
  * Validate API key trước khi sử dụng
  * @returns {{isValid: boolean, message?: string}} - Kết quả validation
@@ -47,6 +50,46 @@ const validateApiKey = () => {
   }
 
   return { isValid: true };
+};
+
+/**
+ * Gọi Gemini API với prompt cho sẵn
+ * @param {string} prompt
+ * @returns {Promise<string>}
+ */
+const callGemini = async (prompt) => {
+  const parts = [{ text: prompt }];
+
+  const geminiResp = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [{ parts }],
+      generationConfig: {
+        temperature: 0.7,
+        topK: 40,
+        topP: 0.95,
+      },
+    }),
+  });
+
+  if (!geminiResp.ok) {
+    const errorData = await geminiResp.json().catch(() => ({}));
+    const errorMsg =
+      errorData.error?.message ||
+      errorData.message ||
+      `HTTP ${geminiResp.status}: ${geminiResp.statusText}`;
+    throw new Error(errorMsg);
+  }
+
+  const data = await geminiResp.json();
+  const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+  if (!responseText) {
+    throw new Error("Không nhận được phản hồi từ AI");
+  }
+
+  return responseText;
 };
 
 /**
@@ -110,7 +153,7 @@ export const getTarotReading = async (cards, spreadType) => {
       )
       .join("\n\n");
 
-    const prompt = `${JSON.stringify(promptConfig, null, 2)}
+    const prompt = `${PROMPT_CONFIG_TEXT}
 
 CONTEXT:
 - Trải bài: ${spreadType.name}
@@ -118,54 +161,7 @@ CONTEXT:
 
 Hãy giải bài theo hệ thống trên.`;
 
-    // 3. Gửi yêu cầu qua REST API
-    const parts = [{ text: prompt }];
-
-    const geminiResp = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts }],
-        generationConfig: {
-          temperature: 0.7,
-          topK: 40,
-          topP: 0.95,
-        },
-      }),
-    });
-
-    if (!geminiResp.ok) {
-      const errorData = await geminiResp.json().catch(() => ({}));
-      const errorMsg =
-        errorData.error?.message ||
-        errorData.message ||
-        `HTTP ${geminiResp.status}: ${geminiResp.statusText}`;
-
-      // Log chi tiết trong dev mode để debug
-      if (import.meta.env.DEV) {
-        // eslint-disable-next-line no-console
-        console.error("API Error Details:", {
-          status: geminiResp.status,
-          statusText: geminiResp.statusText,
-          error: errorData,
-          url: GEMINI_API_URL,
-          model: GEMINI_MODEL,
-        });
-      }
-
-      throw new Error(errorMsg);
-    }
-
-    const data = await geminiResp.json();
-
-    // Extract text từ response
-    const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    if (!responseText) {
-      throw new Error("Không nhận được phản hồi từ AI");
-    }
-
-    return responseText;
+    return await callGemini(prompt);
   } catch (error) {
     // Không dùng console.error, trả về thông báo lỗi thân thiện
     const errorMessage = error?.message || "Lỗi không xác định";
@@ -217,39 +213,7 @@ export const getZodiacCompatibility = async (sign1, sign2) => {
       6. Trình bày ngắn gọn, dùng emoji.
     `;
 
-    // Gửi yêu cầu qua REST API (tương tự getTarotReading)
-    const parts = [{ text: prompt }];
-
-    const geminiResp = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts }],
-        generationConfig: {
-          temperature: 0.7,
-          topK: 40,
-          topP: 0.95,
-        },
-      }),
-    });
-
-    if (!geminiResp.ok) {
-      const errorData = await geminiResp.json().catch(() => ({}));
-      const errorMsg =
-        errorData.error?.message ||
-        errorData.message ||
-        `HTTP ${geminiResp.status}: ${geminiResp.statusText}`;
-      throw new Error(errorMsg);
-    }
-
-    const data = await geminiResp.json();
-    const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    if (!responseText) {
-      throw new Error("Không nhận được phản hồi từ AI");
-    }
-
-    return responseText;
+    return await callGemini(prompt);
   } catch (error) {
     // Không dùng console.error, trả về thông báo lỗi thân thiện
     const errorMessage = error?.message || "Lỗi không xác định";

@@ -3,6 +3,7 @@ import TarotBoard from "./components/Tarot/TarotBoard";
 import NumerologyTool from "./components/Number/NumerologyForm";
 import GuideModal from "./components/GuideModal/Guide_Tarot";
 import ZodiacMatch from "./components/Zodiac/ZodiacMatch";
+import RuneCasting from "./components/Rune/RuneCasting";
 
 function App() {
   const [activeTab, setActiveTab] = useState("tarot"); // 'tarot' hoặc 'numerology'
@@ -54,6 +55,17 @@ function App() {
           >
             💘 Bói Tình Duyên
           </button>
+
+          <button
+            onClick={() => setActiveTab("runes")}
+            className={`px-4 py-2 md:px-6 rounded-full transition-all border border-transparent ${
+              activeTab === "runes"
+                ? "bg-stone-700 text-cyan-300 font-bold shadow-lg border-cyan-500/50"
+                : "bg-white/5 text-gray-400 hover:bg-white/10 hover:border-white/20"
+            }`}
+          >
+            🪨 Runes
+          </button>
         </div>
       </header>
 
@@ -86,6 +98,12 @@ function App() {
         {activeTab === "zodiac" && (
           <div className="animate-fade-in">
             <ZodiacMatch />
+          </div>
+        )}
+
+        {activeTab === "runes" && (
+          <div className="animate-fade-in">
+            <RuneCasting />
           </div>
         )}
       </main>
